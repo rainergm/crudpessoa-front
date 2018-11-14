@@ -1,0 +1,59 @@
+
+  <h2>
+    Listagem de Pessoas
+  </h2>
+
+  <hr/>
+
+  <div class="row">
+      
+      <div class="form-group col-md-4">
+        <label>Nome</label>
+        <input [(ngModel)]="nome" name="nome" class="form-control" type="text"/>
+      </div>
+      
+      <div class="form-group col-md-4">
+        <label>CPF</label>
+        <input [(ngModel)]="cpf" name="cpf" class="form-control" type="text"/>
+      </div>
+
+      <div class="form-group col-md-4" style="margin-top: 30px;">
+        <button class="btn btn-default mr-3" (click)="getPessoasFiltradas()" type="button">Pesquisar</button>
+        <button class="btn btn-primary" [routerLink]="['cadastro']">Cadastrar</button>
+      </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th class="text-center">CPF</th>
+        <th class="text-center">Idade</th>
+        <th class="text-center">Quantidade de Telefones</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr *ngFor="let pessoaIter of pessoas">
+        <td>{{ pessoaIter.id }}</td>
+        <td>{{ pessoaIter.nome}}</td>
+        <td>{{ pessoaIter.email }}</td>
+        <td class="text-center">{{ pessoaIter.cpf }}</td>
+        <td class="text-center">{{ pessoaIter.dataNascimento | calcularIdade }}</td>
+        <td class="text-center">{{ pessoaIter.telefones.length }}</td>
+        <td>
+            <a [routerLink]="'cadastro'" class="mr-3">
+              <span class="fa fa-pencil" aria-hidden="true"></span>
+            </a>
+            <a [routerLink]="'cadastro'">
+              <span class="fa fa-trash" aria-hidden="true"></span>
+            </a>
+          
+        </td>
+      </tr> 
+    </tbody>
+
+  </table>
