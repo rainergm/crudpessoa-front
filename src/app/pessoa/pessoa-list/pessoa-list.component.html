@@ -31,27 +31,31 @@
         <th>E-mail</th>
         <th class="text-center">CPF</th>
         <th class="text-center">Idade</th>
+        <th class="text-center">Idade</th>
         <th class="text-center">Quantidade de Telefones</th>
         <th>Ações</th>
       </tr>
     </thead>
     
     <tbody>
-      <tr *ngFor="let pessoaIter of pessoas">
+      <tr *ngFor="let pessoaIter of pessoas; let i = index;">
         <td>{{ pessoaIter.id }}</td>
         <td>{{ pessoaIter.nome}}</td>
         <td>{{ pessoaIter.email }}</td>
         <td class="text-center">{{ pessoaIter.cpf }}</td>
+        <td class="text-center">{{ pessoaIter.dataNascimento }}</td>
         <td class="text-center">{{ pessoaIter.dataNascimento | calcularIdade }}</td>
         <td class="text-center">{{ pessoaIter.telefones.length }}</td>
         <td>
-            <a [routerLink]="'cadastro'" class="mr-3">
+            <a [routerLink]="['cadastro', pessoaIter.id]" class="mr-3">
               <span class="fa fa-pencil" aria-hidden="true"></span>
             </a>
             <a [routerLink]="'cadastro'">
               <span class="fa fa-trash" aria-hidden="true"></span>
             </a>
-          
+            <button class="btn btn-link" (click)="removerPessoa(pessoaIter.id, i);">
+              <span class="fa fa-trash" aria-hidden="true"></span>
+            </button>
         </td>
       </tr> 
     </tbody>

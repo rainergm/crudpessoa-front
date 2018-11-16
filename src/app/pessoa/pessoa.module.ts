@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { PessoaListComponent } from './pessoa-list/pessoa-list.component';
 import { PessoaCadastroComponent } from './pessoa-cadastro/pessoa-cadastro.component';
@@ -10,11 +10,13 @@ import { CalcularIdadePipe } from 'src/app/shared/calcular-idade.pipe';
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
     FormsModule,
     CommonModule,
     RouterModule.forChild([
       { path: '', component: PessoaListComponent},
-      { path: 'cadastro', component: PessoaCadastroComponent}
+      { path: 'cadastro', component: PessoaCadastroComponent},
+      { path: 'cadastro/:id', component: PessoaCadastroComponent}
     ])
   ],
   declarations: [

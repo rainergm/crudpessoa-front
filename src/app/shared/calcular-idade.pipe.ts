@@ -8,17 +8,17 @@ export class CalcularIdadePipe implements PipeTransform{
     
     transform(value: any, ...args: any[]) {
 
-        /* var dob = new Date(dobString);
-        var currentDate = new Date();
-        var currentYear = currentDate.getFullYear();
-        var birthdayThisYear = new Date(currentYear, dob.getMonth(), dob.getDate());
-        var age = currentYear - dob.getFullYear();
-        if(birthdayThisYear > currentDate) {
-          age--;
-        }
-        return age;
-         */
         
+            var nascimento = value.split("/");
+            var dataNascimento = new Date(parseInt(nascimento[2], 10),
+                          parseInt(nascimento[1], 10) - 1,
+                          parseInt(nascimento[0], 10));
+        
+            var diferenca = Date.now() -  dataNascimento.getTime();
+            var idade = new Date(diferenca);
+            return Math.abs(idade.getUTCFullYear() - 1970);
+        
+ /*        
         let dataNascimento = new Date(value);
         let dataAtual = new Date();
         let aniversarioAno = new Date(dataAtual.getFullYear(), dataNascimento.getMonth(),
@@ -28,8 +28,12 @@ export class CalcularIdadePipe implements PipeTransform{
         if(aniversarioAno > dataAtual){
             idade--;
         }
-        
-        return idade;
+    
+        if(isNaN(idade) ){
+            console.log('.');
+        }     
+
+        return idade;*/
     }
    
 }

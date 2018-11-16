@@ -6,11 +6,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { PessoaModule } from 'src/app/pessoa/pessoa.module';
 import { PessoaListComponent } from 'src/app/pessoa/pessoa-list/pessoa-list.component';
+import { NavBarComponent } from 'src/app/navbar/navbar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
-
+    AppComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,

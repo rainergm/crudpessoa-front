@@ -1,19 +1,20 @@
-<form>
- 
-    <h2> Cadastro de Pessoas </h2>
-  
+<form [formGroup]="pessoaForm">
+
+    <h2 *ngIf="!id"> Cadastro de Pessoas </h2>
+    <h2 *ngIf="id"> Editar dados de Pessoas </h2>
+
     <hr/>
   
     <div class="row">
 
         <div class="form-group col-md-4">
           <label>Nome</label>
-          <input class="form-control" type="text"/>
+          <input class="form-control" type="text" id="nome" formControlName="nome"/>
         </div>
         
         <div class="form-group col-md-4">
           <label>CPF</label>
-          <input class="form-control" type="text"/>
+          <input class="form-control" type="text" id="cpf" formControlName="cpf"/>
         </div>
       
     </div>
@@ -22,33 +23,62 @@
 
         <div class="form-group col-md-4">
           <label>E-mail</label>
-          <input class="form-control" type="text"/>
+          <input class="form-control" type="text" id="email" formControlName="email"/>
         </div>
         
         <div class="form-group col-md-4">
           <label>Data de Nascimento</label>
-          <input class="form-control" type="text"/>
+          <input class="form-control" type="text" id="dataNascimento" formControlName="dataNascimento"/>
         </div>
       
     </div>
 
     <hr/>
 
-    <div class="row">
+    <div class="row" formGroupName="telefone">
 
         <div class="form-group col-md-2">
           <label>DDD</label>
-          <input class="form-control" type="text"/>
+          <input class="form-control" type="text" id="ddd" formControlName="ddd"/>
         </div>
         
         <div class="form-group col-md-4">
           <label>Telefone</label>
-          <input class="form-control" type="text"/>
+          <input class="form-control" type="text" id="numero" formControlName="numero"/>
         </div>
 
         <div class="form-group col-md-4" style="margin-top: 30px;">
-          <button class="btn btn-primary">Adicionar</button>
+          <button type="button" class="btn btn-default" (click)="adicionarTelefone();">Adicionar</button>
+          
         </div>
     </div>
+
+    <div>
+        <table class="table">
+          <thead>
+              <tr>
+                  <th>Id</th>
+                  <th class="text-center">DDD</th>
+                  <th class="text-center">Telefone</th>
+                  <th class="text-center">Ações</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let telefone of telefones.value; let i = index">
+                  <td>{{ telefone.id }}</td>
+                  <td class="text-center">{{ telefone.ddd }}</td>
+                  <td class="text-center">{{ telefone.numero }}</td>
+                  <td class="text-center">
+                    <button class="btn btn-link" (click)="removerTelefone(i);">
+                      <span class="fa fa-trash" aria-hidden="true"></span>
+                    </button>
+                  </td>
+              </tr>
+          </tbody>
+    
+        </table>
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="salvar()">Salvar</button>
 
   </form>

@@ -1,6 +1,6 @@
 
-export interface Telefone{
-    id: number,
-    ddd: number,
-    numero: number
+export class Telefone{
+    id: number;
+    ddd: number;
+    numero: number;
 }
