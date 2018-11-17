@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpParams } from '@angular/common/http';
 
-import { Pessoa } from 'src/app/model/pessoa';
+import { Pessoa } from 'src/app/pessoa/pessoa';
 
 
 @Injectable()
@@ -11,14 +11,14 @@ export class PessoaService {
 
     private URL_RECURSO = 'http://localhost:8080/pessoa';
 
-    constructor(private http: HttpClient){
+    constructor(private http: HttpClient) {
     }
 
-    getPessoas(): Observable<Pessoa[]>{
+    getPessoas(): Observable<Pessoa[]> {
         return this.http.get<Pessoa[]>(this.URL_RECURSO);
     }
 
-    getPessoa(id: number): Observable<Pessoa>{
+    getPessoa(id: number): Observable<Pessoa> {
         return this.http.get<Pessoa>(`${this.URL_RECURSO}/${id}`);
     }
 
@@ -26,19 +26,19 @@ export class PessoaService {
         return this.http.post<Pessoa>(this.URL_RECURSO, pessoa);
     }
 
-    removerPessoa(id: number){
+    removerPessoa(id: number) {
         return this.http.delete<Pessoa>(`${this.URL_RECURSO}/${id}`);
     }
 
-    getPessoasFiltradas(nome:string, cpf:string): Observable<Pessoa[]>{
-        
+    getPessoasFiltradas(nome: string, cpf: string): Observable<Pessoa[]> {
+
         const params = new HttpParams().
             set('nome', nome).set('cpf', cpf);
 
         return this.http.get<Pessoa[]>(`${this.URL_RECURSO}/filtro`, {params});
-        
+
       /*   let url:string = `${this.urlRecurso}`;
-        
+
         if(nome.trim() != ''){
             url += `/${nome}`;
         }
@@ -46,7 +46,7 @@ export class PessoaService {
         if(cpf.trim() != ''){
             url += `/${cpf}`;
         }
-        
+
         return this.http.get<Pessoa[]>(`${this.urlRecurso}/${nome}/${cpf}`); */
     }
 }

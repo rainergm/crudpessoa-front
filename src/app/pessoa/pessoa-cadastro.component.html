@@ -1,0 +1,119 @@
+<form [formGroup]="pessoaForm">
+
+    <h2 *ngIf="!id"> Cadastro de Pessoas </h2>
+    <h2 *ngIf="id"> Editar dados de Pessoas </h2>
+
+    <hr/>
+
+    <div class="row">
+
+        <div class="form-group col-md-5">
+          <label for="nome">Nome:</label>
+          <input class="form-control" type="text" id="nome" formControlName="nome"/>
+
+          <span  *ngIf="pessoaForm.controls.nome.touched && pessoaForm.controls.nome.errors?.required">
+              Campo obrigatório.
+          </span>
+        </div>
+
+        <div class="form-group col-md-3">
+          <label for="cpf">CPF:</label>
+          <input class="form-control" type="text" id="cpf" formControlName="cpf"/>
+
+          <span  *ngIf="pessoaForm.controls.cpf.touched && pessoaForm.controls.cpf.errors?.required">
+              Campo obrigatório.
+          </span>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-4">
+          <label for="email">E-mail:</label>
+          <input class="form-control" type="email" id="email" formControlName="email" email/>
+          <span  *ngIf="pessoaForm.controls.email.touched && pessoaForm.controls.email.errors?.required">
+              Campo obrigatório.
+          </span>
+          <span  *ngIf="pessoaForm.controls.email.touched && pessoaForm.controls.email.errors?.email">
+              Digite um E-mail válido.
+          </span>
+        </div>
+
+        <div class="form-group col-md-4">
+          <label for="dataNascimento">Data de Nascimento:</label>
+          <input class="form-control" placeholder="dd/mm/aaaa" type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" id="dataNascimento" formControlName="dataNascimento"/>
+
+          <span *ngIf="pessoaForm.controls.dataNascimento.touched && pessoaForm.controls.dataNascimento.errors?.required">
+              Campo obrigatório.
+          </span>
+
+          <span *ngIf="pessoaForm.controls.dataNascimento.touched && pessoaForm.controls.dataNascimento.errors?.pattern">
+              Formato de data errado, utilize dd/MM/aaaa.
+          </span>
+        </div>
+
+    </div>
+
+    <hr/>
+
+    <div class="row" formGroupName="telefone">
+
+        <div class="form-group col-md-2">
+          <label for="ddd">DDD:</label>
+          <input class="form-control" type="text" id="ddd" formControlName="ddd"/>
+
+          <span *ngIf="pessoaForm.controls.telefone.controls.ddd.touched && pessoaForm.controls.telefone.controls.ddd.errors?.required">
+              Campo obrigatório.
+          </span>
+         <span *ngIf="pessoaForm.controls.telefone.controls.ddd.touched && pessoaForm.controls.telefone.controls.ddd.errors?.maxlength">
+              Campo deve ser formado por 3 dígitos.
+          </span>
+        </div>
+
+        <div class="form-group col-md-4">
+          <label for="numero">Telefone:</label>
+          <input class="form-control" type="text" id="numero" formControlName="numero"/>
+
+          <span *ngIf="pessoaForm.controls.telefone.controls.numero.touched && pessoaForm.controls.telefone.controls.numero.errors?.required">
+              Campo obrigatório.
+          </span>
+        </div>
+
+        <div class="form-group col-md-4" style="margin-top: 30px;">
+          <button type="button" class="btn btn-default" (click)="adicionarTelefone();"
+              [disabled]="telefone.invalid">
+            Adicionar
+          </button>
+        </div>
+    </div>
+
+    <div *ngIf="possuiTelefone();">
+        <table class="table">
+          <thead>
+              <tr>
+                  <th>Id</th>
+                  <th class="text-center">DDD</th>
+                  <th class="text-center">Telefone</th>
+                  <th class="text-center">Ações</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let telefone of telefones.value; let i = index">
+                  <td>{{ telefone.id }}</td>
+                  <td class="text-center">{{ telefone.ddd }}</td>
+                  <td class="text-center">{{ telefone.numero }}</td>
+                  <td class="text-center">
+                    <button class="btn btn-link" (click)="removerTelefone(i);">
+                      <span class="fa fa-trash" aria-hidden="true"></span>
+                    </button>
+                  </td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+
+    <button   [disabled]="verificaCamposValidos()" type="button" class="btn btn-primary btn-lg" (click)="salvar()">
+        {{ !id ?  'Cadastrar' : 'Atualizar'}}
+    </button>
+  </form>

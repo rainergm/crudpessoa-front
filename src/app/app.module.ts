@@ -1,11 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { PessoaModule } from 'src/app/pessoa/pessoa.module';
-import { PessoaListComponent } from 'src/app/pessoa/pessoa-list/pessoa-list.component';
 import { NavBarComponent } from 'src/app/navbar/navbar.component';
 
 @NgModule({
@@ -17,7 +15,8 @@ import { NavBarComponent } from 'src/app/navbar/navbar.component';
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: 'listar', loadChildren: './pessoa/pessoa.module#PessoaModule' }
+      { path: 'pessoa', loadChildren: './pessoa/pessoa.module#PessoaModule' },
+      { path: '', redirectTo: 'pessoa', pathMatch: 'full' }
     ])
   ],
   providers: [],

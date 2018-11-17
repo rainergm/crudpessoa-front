@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
-import { Telefone } from 'src/app/model/telefone';
-import { Pessoa } from 'src/app/model/pessoa';
-import { PessoaService } from 'src/app/service/pessoa.service';
+import { Telefone } from 'src/app/pessoa/telefone';
+import { Pessoa } from 'src/app/pessoa/pessoa';
+import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -13,27 +12,28 @@ import { Subscription } from 'rxjs/internal/Subscription';
   templateUrl: './pessoa-cadastro.component.html',
   styleUrls: ['./pessoa-cadastro.component.css']
 })
-export class PessoaCadastroComponent implements OnInit {
+export class PessoaCadastroComponent implements OnInit, OnDestroy {
 
-  pessoa: Pessoa
+  pessoa: Pessoa;
   pessoaForm: FormGroup;
   subscription: Subscription;
   id: number;
+  errorMsg: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, 
-    private formBuilder: FormBuilder, private pessoaService: PessoaService) { 
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder, private pessoaService: PessoaService) {
   }
 
   ngOnInit() {
     this.pessoa = new Pessoa();
     this.pessoa.telefones = [];
-    
+
     this.pessoaForm = this.formBuilder.group({
       id: [''],
       nome: ['', [Validators.required]],
       cpf: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      dataNascimento: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      dataNascimento: ['', [Validators.required, Validators.pattern]],
       telefone: this.criarTelefone(),
       telefones: this.formBuilder.array([])
     });
@@ -41,32 +41,21 @@ export class PessoaCadastroComponent implements OnInit {
 
     this.subscription = this.activatedRoute.params.subscribe(params => {
 
-      if(params['id']){
-
+      if (params['id']) {
         this.id = +params['id'];
-
         this.carregarPessoa(+params['id']);
-
-       /*  this.pessoaService.getPessoa(+params['id']).subscribe((pessoaResult: Pessoa) => {
-      
-          this.pessoaForm.patchValue({...this.pessoaForm.value, ...pessoaResult});
-
-          pessoaResult.telefones.forEach(telefoneIter =>{
-              this.construirTelefone(telefoneIter);
-          });
-        }); */
-    }
+      }
     });
 
     console.log('aqui', this.pessoaForm.controls.id.value);
   }
-  
-  carregarPessoa(id: number){
+
+  carregarPessoa(id: number) {
     this.pessoaService.getPessoa(id).subscribe((pessoaResult: Pessoa) => {
-      
+
       this.pessoaForm.patchValue({...this.pessoaForm.value, ...pessoaResult});
 
-      pessoaResult.telefones.forEach(telefoneIter =>{
+      pessoaResult.telefones.forEach(telefoneIter => {
           this.construirTelefone(telefoneIter);
       });
     });
@@ -75,8 +64,8 @@ export class PessoaCadastroComponent implements OnInit {
   criarTelefone(): FormGroup {
     return this.formBuilder.group({
       id: '',
-      ddd: '',
-      numero: ''
+      ddd: ['', [Validators.required, Validators.maxLength(3)]],
+      numero: ['', Validators.required]
     });
   }
 
@@ -85,11 +74,25 @@ export class PessoaCadastroComponent implements OnInit {
     const pessoaMerge = {...this.pessoa, ...this.pessoaForm.value};
     this.pessoaService.salvarPessoa(pessoaMerge).subscribe(() => {
       this.pessoaForm.reset();
+      this.router.navigate(['/pessoa']);
     });
+  }
+
+  verificaCamposValidos(): boolean {
+
+    if (this.pessoaForm.controls.nome.errors
+        || this.pessoaForm.controls.email.errors
+        || this.pessoaForm.controls.dataNascimento.errors
+        || this.pessoaForm.controls.cpf.errors ) {
+      return true;
+    }
+
+    return false;
   }
 
   adicionarTelefone() {
     this.construirTelefone(this.telefone.value);
+    this.telefone.reset();
   }
 
   construirTelefone(telefone?: Telefone) {
@@ -97,7 +100,7 @@ export class PessoaCadastroComponent implements OnInit {
     this.telefones.push(novoTelefone);
   }
 
-  removerTelefone(index: number){
+  removerTelefone(index: number) {
     this.telefones.removeAt(index);
   }
 
@@ -105,8 +108,15 @@ export class PessoaCadastroComponent implements OnInit {
     return <FormArray>this.pessoaForm.get('telefones');
   }
 
+  possuiTelefone(): boolean {
+    return this.telefones.length > 0;
+  }
+
   get telefone() {
     return this.pessoaForm.get('telefone');
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from "@angular/router";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { PessoaListComponent } from './pessoa-list/pessoa-list.component';
-import { PessoaCadastroComponent } from './pessoa-cadastro/pessoa-cadastro.component';
-import { PessoaService } from 'src/app/service/pessoa.service';
+import { PessoaListComponent } from './pessoa-list.component';
+import { PessoaCadastroComponent } from './pessoa-cadastro.component';
+import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { CalcularIdadePipe } from 'src/app/shared/calcular-idade.pipe';
 
 @NgModule({
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    CommonModule,
     RouterModule.forChild([
       { path: '', component: PessoaListComponent},
       { path: 'cadastro', component: PessoaCadastroComponent},
@@ -25,7 +25,7 @@ import { CalcularIdadePipe } from 'src/app/shared/calcular-idade.pipe';
     CalcularIdadePipe
   ],
   providers: [
-    PessoaService    
+    PessoaService
   ]
 })
 export class PessoaModule { }
